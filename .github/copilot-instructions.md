@@ -20,7 +20,7 @@ An interactive SQL learning web application with AI-powered tutoring, inspired b
 
 - Django REST API for lesson management and query execution
 - Supabase (PostgreSQL) for data persistence and authentication
-- OpenAI GPT-4/GPT-4o-mini via LangChain for AI tutoring features
+- **Google Gemini AI** (Gemini 1.5 Flash/Pro) via LangChain for AI tutoring features
 - Web Speech API integration for voice commands
 
 ## Development Workflow
@@ -56,7 +56,7 @@ src/
 ├── pages/           # Route-level components
 ├── utils/           # Helper functions
 ├── hooks/           # Custom React hooks
-└── services/        # API client logic (Supabase, Django REST)
+└── services/        # API client logic (Supabase, Django REST, Gemini)
 ```
 
 ### TypeScript Standards
@@ -77,13 +77,21 @@ src/
 
 ### AI Features Architecture (See `AI-Guide/ai_guide.md`)
 
+**Core AI System**: Google Gemini via LangChain
+
+- **Primary Model**: Gemini 1.5 Flash (cost-effective, fast responses)
+- **Advanced Model**: Gemini 1.5 Pro (complex query optimization, detailed explanations)
+- **Framework**: LangChain for orchestration and conversational memory
+
+**AI-Powered Features**:
+
 1. **SQL Editor**: Sandbox execution via Django API endpoint
-2. **AI Tutor Chatbot**: LangChain + GPT-4o-mini with conversational memory in sessionStorage
-3. **Voice Commands**: Web Speech API → natural language → AI interpretation
-4. **Use Cases**:
-   - Query explanation: "Explain what this SQL query does"
-   - Syntax correction: AI suggests improvements
-   - Natural language to SQL: "Show all students older than 20"
+2. **AI Tutor Chatbot**: LangChain + Gemini 1.5 Flash with conversational memory in sessionStorage
+3. **Voice Commands**: Web Speech API → natural language → Gemini interpretation
+4. **Query Explanation**: Analyzes user's SQL code with natural language explanations
+5. **Natural Language to SQL**: Converts voice/text commands to SQL queries
+   - Example: "Show all students older than 20" → `SELECT * FROM students WHERE age > 20;`
+6. **Hint System**: Progressive hints for exercises, adaptive based on user mistakes
 
 ### Data Flow (Planned)
 
@@ -94,7 +102,7 @@ User Input (Editor/Voice) → Frontend (React)
                           ↓
             Supabase (PostgreSQL + Auth)
                           ↓
-            LangChain + OpenAI (AI analysis)
+            LangChain + Google Gemini (AI analysis)
                           ↓
             Frontend (results + AI feedback)
 ```
@@ -109,7 +117,8 @@ User Input (Editor/Voice) → Frontend (React)
 
 **Backend (`.env` - not in repo)**:
 
-- `OPENAI_API_KEY`, `SUPABASE_URL`, `SUPABASE_KEY`, `DJANGO_SECRET_KEY`
+- `GOOGLE_API_KEY` or `GEMINI_API_KEY` - Google AI Studio API key
+- `SUPABASE_URL`, `SUPABASE_KEY`, `DJANGO_SECRET_KEY`
 
 ## Critical Context for Development
 
@@ -125,6 +134,7 @@ User Input (Editor/Voice) → Frontend (React)
 - **Strict TypeScript**: Catch errors early with comprehensive type checking
 - **Modular tsconfig**: Separates app code from build tooling for cleaner IDE experience
 - **React 19**: Latest features including improved hooks and concurrent rendering
+- **Gemini over OpenAI**: Cost-effective AI solution with competitive performance (Gemini 1.5 Flash offers free tier and lower costs)
 
 ### Dependencies to Add (Per AI Guide)
 
@@ -133,18 +143,29 @@ User Input (Editor/Voice) → Frontend (React)
 - **Routing**: React Router (for lesson pages, dashboard, admin)
 - **HTTP**: Axios or fetch wrapper (API communication)
 - **State**: Context API or Zustand (user progress, auth state)
+- **AI**: `@langchain/google-genai` (Gemini integration), `langchain` (core framework)
+
+### Gemini API Integration Notes
+
+- **SDK**: Use `@langchain/google-genai` for TypeScript/Node.js integration
+- **Rate Limits**: Gemini 1.5 Flash has generous free tier (15 RPM, 1M TPM, 1500 RPD)
+- **Context Window**: 1M tokens (supports large conversation histories and code analysis)
+- **Streaming**: Supports streaming responses for real-time chatbot experience
+- **Safety Settings**: Configure content filtering based on educational context
 
 ## Testing & Debugging (Not Yet Configured)
 
 - No test framework configured yet - consider Vitest (Vite-native) or Jest
 - React DevTools recommended for component inspection
 - Browser DevTools for Web Speech API testing
+- Google AI Studio for testing Gemini prompts before integration
 
 ## Deployment Strategy (Planned)
 
 - **Frontend**: Vercel (connect GitHub repo, auto-deploy main branch)
 - **Backend**: Supabase Edge Functions or Render (Django hosting)
 - **CORS**: Ensure Django allows frontend domain in production
+- **API Keys**: Store Gemini API key securely in backend environment variables (never expose in frontend)
 
 ## Reference Files
 
