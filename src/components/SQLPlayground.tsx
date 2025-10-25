@@ -1,0 +1,148 @@
+import { useState } from "react";
+import Card from "./Card.tsx";
+import Button from "./Button.tsx";
+
+interface QueryResult {
+  [key: string]: string | number;
+}
+
+export default function SQLPlayground() {
+  const [query, setQuery] = useState(
+    "SELECT id, name, course FROM students WHERE year = 3;"
+  );
+  const [results, setResults] = useState<QueryResult[]>([]);
+  const [showResults, setShowResults] = useState(false);
+
+  const runQuery = () => {
+    const q = query.trim();
+    if (!q) {
+      alert("Please type a query");
+      return;
+    }
+
+    // Mock query execution - simple pattern matching
+    let rows: QueryResult[] = [];
+
+    if (/WHERE.*year.*=\s*3/i.test(q) || /year\s*=\s*3/i.test(q)) {
+      rows = [
+        { id: 1, name: "Aldrin S.", course: "BSIT" },
+        { id: 2, name: "Bea M.", course: "BSCS" },
+      ];
+    } else if (/FROM\s+students/i.test(q)) {
+      rows = [
+        { id: 1, name: "Aldrin S.", course: "BSIT" },
+        { id: 2, name: "Bea M.", course: "BSCS" },
+        { id: 3, name: "Carlo P.", course: "BSEd" },
+      ];
+    } else {
+      rows = [{ info: "No matching mock results — this is a frontend demo." }];
+    }
+
+    setResults(rows);
+    setShowResults(true);
+  };
+
+  const loadExample = () => {
+    setQuery(
+      "SELECT name, course, year FROM students WHERE course = 'BSIT' ORDER BY name;"
+    );
+  };
+
+  const clearOutput = () => {
+    setShowResults(false);
+    setResults([]);
+  };
+
+  return (
+    <Card>
+      <h3 style={{ marginTop: 0 }}>SQL Playground</h3>
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        <label style={{ fontWeight: 700 }}>
+          Write a SQL query (sample table: students)
+        </label>
+        <textarea
+          id="sqlInput"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          style={{
+            width: "100%",
+            minHeight: "140px",
+            padding: "12px",
+            borderRadius: "8px",
+            border: "1px solid #e6e6e6",
+            fontFamily:
+              'ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace',
+            fontSize: "14px",
+          }}
+        />
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+          <Button variant="primary" onClick={runQuery}>
+            Run Query
+          </Button>
+          <Button onClick={loadExample}>Load Example</Button>
+          <Button onClick={clearOutput}>Clear</Button>
+        </div>
+
+        {showResults && results.length > 0 && (
+          <div
+            style={{
+              borderRadius: "8px",
+              border: "1px solid #e9e9e9",
+              padding: "12px",
+              background: "linear-gradient(180deg, #ffffff, #f7fff7)",
+              animation: "fadeIn 0.26s ease-out",
+            }}
+          >
+            <div style={{ fontWeight: 700, marginBottom: "8px" }}>
+              Result (mock)
+            </div>
+            <div style={{ overflowX: "auto" }}>
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                }}
+              >
+                <thead>
+                  <tr>
+                    {Object.keys(results[0]).map((key) => (
+                      <th
+                        key={key}
+                        style={{
+                          padding: "8px",
+                          borderBottom: "1px solid #eee",
+                          textAlign: "left",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {key}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((row, idx) => (
+                    <tr key={idx}>
+                      {Object.values(row).map((value, cellIdx) => (
+                        <td
+                          key={cellIdx}
+                          style={{
+                            padding: "8px",
+                            borderBottom: "1px solid #eee",
+                            textAlign: "left",
+                          }}
+                        >
+                          {value}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+}

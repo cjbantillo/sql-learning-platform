@@ -4,7 +4,7 @@
 
 An interactive SQL learning web application with AI-powered tutoring, inspired by W3Schools and SoloLearn. The platform combines hands-on SQL practice with real-time AI feedback, voice commands, gamification, and progress tracking.
 
-**Current State**: Early development phase - core React+Vite+TypeScript scaffold established, planned features documented in `AI-Guide/ai_guide.md`.
+**Current State**: Initial implementation phase - CSU-branded landing page with interactive SQL playground built using React components and inline styles. Core architecture established with reusable component patterns.
 
 ## Architecture & Tech Stack
 
@@ -13,8 +13,10 @@ An interactive SQL learning web application with AI-powered tutoring, inspired b
 - **Framework**: React 19 + Vite 7 + TypeScript 5.8
 - **Build Tool**: Vite with SWC for fast refresh (@vitejs/plugin-react-swc)
 - **Type System**: Strict TypeScript with bundler module resolution
+- **Styling**: CSS Variables + Inline Styles (CSS-in-JS pattern via React style prop)
 - **Entry Points**: `src/main.tsx` → `src/App.tsx`
-- **Empty Directories Ready for Implementation**: `src/components/`, `src/pages/`, `src/routes/`
+- **Implemented Components**: Header, Footer, Card, Button, Modal, SQLPlayground, HomePage
+- **Component Architecture**: Functional components with TypeScript interfaces for props
 
 ### Planned Backend (Not Yet Implemented)
 
@@ -42,6 +44,93 @@ npm run preview      # Preview production build locally
 
 ## Code Conventions & Patterns
 
+### Implemented Component Structure
+
+```
+src/
+├── components/
+│   ├── Button.tsx        # Reusable button with variant system (primary, accent, default)
+│   ├── Card.tsx          # Container component with CSU design system
+│   ├── Header.tsx        # Navigation with dark mode toggle
+│   ├── Footer.tsx        # Footer with copyright info
+│   ├── Modal.tsx         # Accessible modal dialog with keyboard support
+│   └── SQLPlayground.tsx # Interactive SQL editor with mock query execution
+├── pages/
+│   └── HomePage.tsx      # Main landing page with hero, features, lessons
+├── index.css             # Global styles and CSS variables
+├── App.tsx               # Root component orchestrating layout
+└── main.tsx              # React root initialization with CSS import
+```
+
+### Component Design Patterns
+
+#### 1. **CSS Variables for Design System**
+
+All colors defined in `src/index.css` using CSS custom properties:
+
+```css
+:root {
+  --csu-green: #006400; /* Primary brand color */
+  --csu-gold: #ffc727; /* Accent color */
+  --charcoal: #1a1a1a; /* Dark backgrounds */
+  --light: #f4f4f4; /* Light backgrounds */
+  --text: #2b2b2b; /* Primary text */
+  --muted: #7a7a7a; /* Secondary text */
+  --success: #2ecc71; /* Success states */
+}
+```
+
+#### 2. **Inline Styles Pattern**
+
+Components use React's `style` prop for styling to avoid build dependencies:
+
+- **Pros**: No CSS-in-JS library needed, component-scoped styles, TypeScript support
+- **Cons**: No pseudo-classes (`:hover`), larger bundle size for repeated styles
+- **Usage**: Combine inline styles with CSS variables for maintainability
+
+```tsx
+<button
+  style={{
+    background: "var(--csu-green)",
+    padding: "12px 18px",
+    borderRadius: "10px",
+  }}
+>
+  Click me
+</button>
+```
+
+#### 3. **Component Props with TypeScript Interfaces**
+
+All components use explicit TypeScript interfaces:
+
+```tsx
+interface ButtonProps {
+  children: ReactNode;
+  onClick?: () => void;
+  variant?: "primary" | "accent" | "default";
+  type?: "button" | "submit" | "reset";
+  style?: CSSProperties;
+  className?: string;
+}
+```
+
+#### 4. **Modal State Management**
+
+- Header triggers modal open via callback prop `onModalOpen`
+- HomePage manages modal content and state
+- Modal component handles accessibility (Escape key, backdrop click, aria attributes)
+
+#### 5. **Mock Data Pattern**
+
+SQLPlayground uses regex pattern matching to simulate query execution:
+
+```tsx
+if (/WHERE.*year.*=\s*3/i.test(query)) {
+  // Return filtered mock data
+}
+```
+
 ### File Organization (Planned Structure from AI Guide)
 
 ```
@@ -65,6 +154,8 @@ src/
 - **No implicit any**: Strict typing enforced
 - **Module imports**: Use `.tsx` extension explicitly in imports (required by `verbatimModuleSyntax`)
 - **JSX Transform**: `react-jsx` - no need to import React in component files
+- **Props Interfaces**: Define explicit interfaces for all component props
+- **CSSProperties Type**: Use React's `CSSProperties` for inline style objects
 
 ### ESLint Configuration
 
@@ -124,9 +215,31 @@ User Input (Editor/Voice) → Frontend (React)
 
 ### Current State vs. Planned Features
 
-- **Implemented**: Vite scaffold, TypeScript config, ESLint setup, minimal React shell
-- **Not Yet Built**: All features in `AI-Guide/ai_guide.md` (SQL editor, AI tutor, authentication, backend, database)
-- **Next Steps**: Implement component structure in `src/components/` and routing in `src/routes/`
+- **Implemented**:
+  - Vite scaffold with TypeScript and ESLint
+  - CSU-branded landing page with hero section
+  - Interactive SQL playground with mock query execution
+  - Reusable component library (Button, Card, Modal, Header, Footer)
+  - Dark mode toggle functionality
+  - Modal system for About, Achievements, Contact, Socials
+  - Progress tracking UI (static, 42% mock progress)
+  - Featured lessons section
+- **Not Yet Built**:
+  - Backend integration (Django REST API, Supabase)
+  - AI tutor chatbot (Google Gemini integration)
+  - Voice command system (Web Speech API)
+  - Real authentication and user management
+  - Database-driven lesson content
+  - Progress persistence
+  - Real SQL query execution in sandbox
+  - Routing system for multiple pages
+  - Charts and data visualization
+- **Next Steps**:
+  - Add React Router for multi-page navigation
+  - Integrate backend API for real query execution
+  - Implement AI chatbot interface
+  - Add authentication flow with Supabase
+  - Build lesson management system
 
 ### Design Decisions
 
@@ -135,6 +248,9 @@ User Input (Editor/Voice) → Frontend (React)
 - **Modular tsconfig**: Separates app code from build tooling for cleaner IDE experience
 - **React 19**: Latest features including improved hooks and concurrent rendering
 - **Gemini over OpenAI**: Cost-effective AI solution with competitive performance (Gemini 1.5 Flash offers free tier and lower costs)
+- **Inline Styles over CSS Modules**: Simplifies component architecture, avoids build configuration, enables dynamic styling with TypeScript support
+- **CSS Variables**: Centralized design system with runtime theming support (dark mode)
+- **No External UI Library**: Custom components built from scratch for learning purposes and full control
 
 ### Dependencies to Add (Per AI Guide)
 
