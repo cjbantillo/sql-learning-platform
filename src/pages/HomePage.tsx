@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Card from "../components/Card.tsx";
 import Button from "../components/Button.tsx";
 import SQLPlayground from "../components/SQLPlayground.tsx";
@@ -249,12 +250,9 @@ export default function HomePage({
                 <Button variant="primary" onClick={scrollToPlayground}>
                   Try Playground
                 </Button>
-                <Button
-                  variant="accent"
-                  onClick={() => setActiveModal("about")}
-                >
-                  Get Started
-                </Button>
+                <Link to="/lessons">
+                  <Button variant="accent">Browse Lessons</Button>
+                </Link>
               </div>
 
               {/* Features Grid */}

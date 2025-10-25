@@ -20,22 +20,105 @@ export default function SQLPlayground() {
       return;
     }
 
-    // Mock query execution - simple pattern matching
+    // Mock query execution - enhanced pattern matching
     let rows: QueryResult[] = [];
+    let message = "";
 
-    if (/WHERE.*year.*=\s*3/i.test(q) || /year\s*=\s*3/i.test(q)) {
+    // INSERT queries
+    if (/INSERT\s+INTO/i.test(q)) {
+      message = "✓ 1 row inserted successfully (mock)";
+      rows = [{ status: "success", message }];
+    }
+    // UPDATE queries
+    else if (/UPDATE\s+\w+\s+SET/i.test(q)) {
+      message = "✓ 2 rows updated successfully (mock)";
+      rows = [{ status: "success", message }];
+    }
+    // DELETE queries
+    else if (/DELETE\s+FROM/i.test(q)) {
+      message = "✓ 1 row deleted successfully (mock)";
+      rows = [{ status: "success", message }];
+    }
+    // JOIN queries
+    else if (/JOIN/i.test(q)) {
       rows = [
-        { id: 1, name: "Aldrin S.", course: "BSIT" },
-        { id: 2, name: "Bea M.", course: "BSCS" },
+        {
+          student_id: 1,
+          student_name: "Aldrin S.",
+          course_name: "Information Technology",
+          instructor: "Prof. Garcia",
+        },
+        {
+          student_id: 2,
+          student_name: "Bea M.",
+          course_name: "Computer Science",
+          instructor: "Prof. Santos",
+        },
+        {
+          student_id: 3,
+          student_name: "Carlo P.",
+          course_name: "Education",
+          instructor: "Prof. Reyes",
+        },
       ];
-    } else if (/FROM\s+students/i.test(q)) {
+    }
+    // Aggregate functions (COUNT, SUM, AVG, etc.)
+    else if (/COUNT|SUM|AVG|MIN|MAX/i.test(q)) {
+      if (/COUNT/i.test(q)) {
+        rows = [{ count: 15 }];
+      } else if (/AVG/i.test(q)) {
+        rows = [{ average: 88.5 }];
+      } else if (/SUM/i.test(q)) {
+        rows = [{ total: 450 }];
+      } else {
+        rows = [{ result: 42 }];
+      }
+    }
+    // GROUP BY queries
+    else if (/GROUP\s+BY/i.test(q)) {
       rows = [
-        { id: 1, name: "Aldrin S.", course: "BSIT" },
-        { id: 2, name: "Bea M.", course: "BSCS" },
-        { id: 3, name: "Carlo P.", course: "BSEd" },
+        { course: "BSIT", count: 8 },
+        { course: "BSCS", count: 5 },
+        { course: "BSEd", count: 2 },
       ];
-    } else {
-      rows = [{ info: "No matching mock results — this is a frontend demo." }];
+    }
+    // ORDER BY queries
+    else if (/ORDER\s+BY/i.test(q)) {
+      rows = [
+        { id: 1, name: "Aldrin S.", course: "BSIT", year: 3 },
+        { id: 2, name: "Bea M.", course: "BSCS", year: 3 },
+        { id: 3, name: "Carlo P.", course: "BSEd", year: 2 },
+      ];
+    }
+    // WHERE with year = 3
+    else if (/WHERE.*year.*=\s*3/i.test(q) || /year\s*=\s*3/i.test(q)) {
+      rows = [
+        { id: 1, name: "Aldrin S.", course: "BSIT", year: 3 },
+        { id: 2, name: "Bea M.", course: "BSCS", year: 3 },
+      ];
+    }
+    // WHERE with course filter
+    else if (/WHERE.*course.*=.*'BSIT'/i.test(q)) {
+      rows = [
+        { id: 1, name: "Aldrin S.", course: "BSIT", year: 3 },
+        { id: 4, name: "Diana L.", course: "BSIT", year: 2 },
+      ];
+    }
+    // Basic SELECT from students
+    else if (/FROM\s+students/i.test(q)) {
+      rows = [
+        { id: 1, name: "Aldrin S.", course: "BSIT", year: 3 },
+        { id: 2, name: "Bea M.", course: "BSCS", year: 3 },
+        { id: 3, name: "Carlo P.", course: "BSEd", year: 2 },
+      ];
+    }
+    // Default fallback
+    else {
+      rows = [
+        {
+          info: "No matching mock results — this is a frontend demo. Try SELECT, INSERT, UPDATE, DELETE, JOIN, or aggregate functions.",
+        },
+      ];
     }
 
     setResults(rows);
