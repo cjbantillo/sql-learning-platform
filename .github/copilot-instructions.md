@@ -1,10 +1,10 @@
-# SQL Learning Platform - AI Agent Guide
+# CSU Digital Academy - SQL Learning Platform - AI Agent Guide
 
 ## Project Overview
 
-An interactive SQL learning web application with AI-powered tutoring, inspired by W3Schools and SoloLearn. The platform combines hands-on SQL practice with real-time AI feedback, voice commands, gamification, and progress tracking.
+**CSU Digital Academy** is an interactive SQL learning web application designed for Caraga State University students. The platform combines hands-on SQL practice with real-time AI feedback, voice commands, gamification, and progress tracking, inspired by W3Schools and SoloLearn.
 
-**Current State**: Production-ready implementation - Full-featured SQL learning platform with routing, Monaco Editor, progress tracking, and localStorage persistence. All frontend features complete and ready for backend integration.
+**Current State**: Production-ready implementation - Full-featured SQL learning platform with routing, Monaco Editor, progress tracking, localStorage persistence, and professional Lucide React icons. All frontend features complete and ready for backend integration.
 
 ## Architecture & Tech Stack
 
@@ -14,13 +14,14 @@ An interactive SQL learning web application with AI-powered tutoring, inspired b
 - **Build Tool**: Vite with SWC for fast refresh (@vitejs/plugin-react-swc)
 - **Type System**: Strict TypeScript with bundler module resolution
 - **Styling**: CSS Variables + Inline Styles (CSS-in-JS pattern via React style prop)
+- **Icons**: Lucide React for professional, consistent iconography
 - **Routing**: React Router DOM v7 for multi-page navigation
 - **Code Editor**: Monaco Editor (@monaco-editor/react) for SQL syntax highlighting
 - **State Management**: React Context API for progress tracking
 - **Persistence**: localStorage for dark mode, user progress, and lesson completion
 - **Entry Points**: `src/main.tsx` → `src/App.tsx`
-- **Implemented Components**: Header, Footer, Card, Button, Modal, SQLPlayground
-- **Implemented Pages**: HomePage, LessonsPage, LessonDetailPage
+- **Implemented Components**: Header, Footer, Card, Button (with icon support), Modal, SQLPlayground
+- **Implemented Pages**: HomePage, LessonsPage, NoSQLLessonsPage, LessonDetailPage
 - **Component Architecture**: Functional components with TypeScript interfaces for props
 
 ### Planned Backend (Not Yet Implemented)
@@ -222,13 +223,14 @@ User Input (Editor/Voice) → Frontend (React)
 
 - **Implemented**:
   - Vite scaffold with TypeScript and ESLint
-  - CSU-branded landing page with hero section
+  - CSU Digital Academy branded platform with professional logo placeholder
   - Interactive SQL playground with mock query execution
-  - Reusable component library (Button, Card, Modal, Header, Footer)
-  - Dark mode toggle functionality
+  - Reusable component library with Lucide React icons (Button, Card, Modal, Header, Footer)
+  - Dark mode toggle functionality with Moon/Sun icons
   - Modal system for About, Achievements, Contact, Socials
   - Progress tracking UI (static, 42% mock progress)
-  - Featured lessons section
+  - Featured lessons section with professional iconography
+  - Multi-page routing (HomePage, LessonsPage, NoSQLLessonsPage, LessonDetailPage)
 - **Not Yet Built**:
   - Backend integration (Django REST API, Supabase)
   - AI tutor chatbot (Google Gemini integration)
@@ -255,15 +257,24 @@ User Input (Editor/Voice) → Frontend (React)
 - **Gemini over OpenAI**: Cost-effective AI solution with competitive performance (Gemini 1.5 Flash offers free tier and lower costs)
 - **Inline Styles over CSS Modules**: Simplifies component architecture, avoids build configuration, enables dynamic styling with TypeScript support
 - **CSS Variables**: Centralized design system with runtime theming support (dark mode)
+- **Lucide React Icons**: Professional, consistent iconography throughout the application
+- **CSU Digital Academy Branding**: Professional academic institution branding with logo placeholder
 - **No External UI Library**: Custom components built from scratch for learning purposes and full control
 
-### Dependencies to Add (Per AI Guide)
+### Dependencies Added & To Add
 
-- **UI**: TailwindCSS (styling), Monaco Editor or CodeMirror 6 (SQL editor)
-- **Data Viz**: Chart.js or Recharts (query result visualization)
+**Already Added:**
+
+- **Icons**: Lucide React (professional iconography)
 - **Routing**: React Router (for lesson pages, dashboard, admin)
+- **Code Editor**: Monaco Editor (@monaco-editor/react) for SQL syntax highlighting
+
+**To Add (Per AI Guide):**
+
+- **UI**: TailwindCSS (optional styling enhancement)
+- **Data Viz**: Chart.js or Recharts (query result visualization)
 - **HTTP**: Axios or fetch wrapper (API communication)
-- **State**: Context API or Zustand (user progress, auth state)
+- **State**: Enhanced Context API or Zustand (user progress, auth state)
 - **AI**: `@langchain/google-genai` (Gemini integration), `langchain` (core framework)
 
 ### Gemini API Integration Notes

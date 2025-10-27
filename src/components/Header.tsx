@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { GraduationCap, Moon, Sun } from "lucide-react";
 
 interface HeaderProps {
   onModalOpen: (modalName: string) => void;
@@ -62,20 +63,23 @@ export default function Header({ onModalOpen }: HeaderProps) {
             color: "inherit",
           }}
         >
-          <img
-            src="/mnt/data/aedbe48d-2b02-4713-93d7-020c86fae303.png"
-            alt="CSU Logo"
+          {/* Logo Placeholder - Replace with actual CSU logo */}
+          <div
             style={{
-              height: "56px",
-              width: "auto",
-              borderRadius: "8px",
-              background: "white",
-              padding: "4px",
+              height: "52px",
+              width: "52px",
+              borderRadius: "12px",
+              background: "rgba(255, 255, 255, 0.95)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backdropFilter: "blur(10px)",
+              border: "2px solid rgba(255, 255, 255, 0.2)",
             }}
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-            }}
-          />
+          >
+            {/* TODO: Replace with actual CSU logo image */}
+            <GraduationCap size={28} color="var(--csu-green)" />
+          </div>
           <div>
             <div style={{ fontWeight: 700, fontSize: "18px" }}>
               CSU Digital Academy
@@ -83,7 +87,7 @@ export default function Header({ onModalOpen }: HeaderProps) {
             <div
               style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.9)" }}
             >
-              Interactive SQL Learning
+              Professional Database Learning Platform
             </div>
           </div>
         </Link>
@@ -193,14 +197,18 @@ export default function Header({ onModalOpen }: HeaderProps) {
           style={{
             background: "transparent",
             border: "1px solid rgba(255, 255, 255, 0.18)",
-            padding: "6px 10px",
+            padding: "8px",
             borderRadius: "8px",
             color: "white",
-            fontWeight: 600,
             cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.2s ease",
           }}
+          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
-          Toggle Dark
+          {isDark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
       </nav>
     </header>

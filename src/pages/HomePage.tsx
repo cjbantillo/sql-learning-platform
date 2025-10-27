@@ -4,6 +4,7 @@ import Card from "../components/Card.tsx";
 import Button from "../components/Button.tsx";
 import SQLPlayground from "../components/SQLPlayground.tsx";
 import Modal from "../components/Modal.tsx";
+import { Play, BookOpen, Trophy, Code } from "lucide-react";
 
 interface HomePageProps {
   externalModal?: string | null;
@@ -247,11 +248,17 @@ export default function HomePage({
               <div
                 style={{ display: "flex", gap: "12px", marginBottom: "22px" }}
               >
-                <Button variant="primary" onClick={scrollToPlayground}>
+                <Button
+                  variant="primary"
+                  onClick={scrollToPlayground}
+                  icon={<Play size={16} />}
+                >
                   Try Playground
                 </Button>
                 <Link to="/lessons">
-                  <Button variant="accent">Browse Lessons</Button>
+                  <Button variant="accent" icon={<BookOpen size={16} />}>
+                    Browse Lessons
+                  </Button>
                 </Link>
               </div>
 
@@ -273,11 +280,18 @@ export default function HomePage({
                   }}
                   className="feature"
                 >
-                  <strong>Interactive Lessons</strong>
                   <div
-                    className="muted"
-                    style={{ fontSize: "13px", marginTop: "8px" }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      marginBottom: "8px",
+                    }}
                   >
+                    <BookOpen size={16} color="var(--csu-green)" />
+                    <strong>Interactive Lessons</strong>
+                  </div>
+                  <div className="muted" style={{ fontSize: "13px" }}>
                     Step-by-step learning modules and quizzes
                   </div>
                 </div>
@@ -290,11 +304,18 @@ export default function HomePage({
                   }}
                   className="feature"
                 >
-                  <strong>SQL Playground</strong>
                   <div
-                    className="muted"
-                    style={{ fontSize: "13px", marginTop: "8px" }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      marginBottom: "8px",
+                    }}
                   >
+                    <Code size={16} color="var(--csu-green)" />
+                    <strong>SQL Playground</strong>
+                  </div>
+                  <div className="muted" style={{ fontSize: "13px" }}>
                     Type queries, run, and see sample results
                   </div>
                 </div>
@@ -307,11 +328,18 @@ export default function HomePage({
                   }}
                   className="feature"
                 >
-                  <strong>Certificates</strong>
                   <div
-                    className="muted"
-                    style={{ fontSize: "13px", marginTop: "8px" }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      marginBottom: "8px",
+                    }}
                   >
+                    <Trophy size={16} color="var(--csu-green)" />
+                    <strong>Certificates</strong>
+                  </div>
+                  <div className="muted" style={{ fontSize: "13px" }}>
                     Earn badges and track progress
                   </div>
                 </div>

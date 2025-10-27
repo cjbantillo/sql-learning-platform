@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  type ReactNode,
-} from "react";
+import { createContext, useState, useEffect, type ReactNode } from "react";
 
 interface LessonProgress {
   lessonId: string;
@@ -109,10 +103,5 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useProgress() {
-  const context = useContext(ProgressContext);
-  if (!context) {
-    throw new Error("useProgress must be used within a ProgressProvider");
-  }
-  return context;
-}
+// Export the context for use in hooks
+export { ProgressContext };

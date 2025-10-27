@@ -2,16 +2,107 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
 import { getLessonById, type Exercise } from "../data/lessons.ts";
-import { useProgress } from "../contexts/ProgressContext.tsx";
+import { getNoSQLLessonById } from "../data/nosql-lessons.ts";
+import { useProgress } from "../hooks/useProgress";
 import Card from "../components/Card.tsx";
 import Button from "../components/Button.tsx";
+import { ArrowLeft, HelpCircle, CheckCircle } from "lucide-react";
+
+// Function to add basic SQL syntax highlighting
+function highlightSQL(code: string): string {
+  const sqlKeywords = [
+    "SELECT",
+    "FROM",
+    "WHERE",
+    "INSERT",
+    "UPDATE",
+    "DELETE",
+    "CREATE",
+    "DROP",
+    "ALTER",
+    "JOIN",
+    "INNER",
+    "LEFT",
+    "RIGHT",
+    "OUTER",
+    "ON",
+    "GROUP",
+    "BY",
+    "ORDER",
+    "HAVING",
+    "LIMIT",
+    "DISTINCT",
+    "COUNT",
+    "SUM",
+    "AVG",
+    "MIN",
+    "MAX",
+    "AND",
+    "OR",
+    "NOT",
+    "IN",
+    "LIKE",
+    "BETWEEN",
+    "IS",
+    "NULL",
+    "EXISTS",
+    "UNION",
+    "INTERSECT",
+    "EXCEPT",
+    "CASE",
+    "WHEN",
+    "THEN",
+    "ELSE",
+    "END",
+    "AS",
+    "WITH",
+    "RECURSIVE",
+    "PARTITION",
+    "OVER",
+    "ROWS",
+    "RANGE",
+    "WINDOW",
+    "RANK",
+    "ROW_NUMBER",
+    "DENSE_RANK",
+    "LAG",
+    "LEAD",
+    "FIRST_VALUE",
+    "LAST_VALUE",
+  ];
+
+  let highlighted = code;
+
+  // Highlight SQL keywords
+  sqlKeywords.forEach((keyword) => {
+    const regex = new RegExp(`\\b${keyword}\\b`, "gi");
+    highlighted = highlighted.replace(
+      regex,
+      `<span class="sql-keyword">${keyword}</span>`
+    );
+  });
+
+  // Highlight strings (single quotes)
+  highlighted = highlighted.replace(
+    /'([^']*)'/g,
+    "<span class=\"sql-string\">'$1'</span>"
+  );
+
+  // Highlight comments (-- style)
+  highlighted = highlighted.replace(
+    /--\s*(.*)/g,
+    '<span class="sql-comment">-- $1</span>'
+  );
+
+  return highlighted;
+}
 
 export default function LessonDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { completeLesson, addBadge } = useProgress();
 
-  const lesson = id ? getLessonById(id) : undefined;
+  const lesson = id ? getLessonById(id) || getNoSQLLessonById(id) : undefined;
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [query, setQuery] = useState("");
   const [showHint, setShowHint] = useState(false);
@@ -29,7 +120,9 @@ export default function LessonDetailPage() {
         <Card>
           <h2>Lesson not found</h2>
           <Link to="/lessons">
-            <Button variant="primary">Back to Lessons</Button>
+            <Button variant="primary" icon={<ArrowLeft size={16} />}>
+              Back to Lessons
+            </Button>
           </Link>
         </Card>
       </main>
@@ -155,7 +248,30 @@ export default function LessonDetailPage() {
                 __html: lesson.content
                   .replace(
                     /```sql([\s\S]*?)```/g,
-                    '<pre style="background: #f4f4f4; padding: 12px; border-radius: 8px; overflow-x: auto;"><code>$1</code></pre>'
+                    (_, code) =>
+                      `<pre class="sql-code-block"><code>${highlightSQL(
+                        code.trim()
+                      )}</code></pre>`
+                  )
+                  .replace(
+                    /```redis([\s\S]*?)```/g,
+                    '<pre class="sql-code-block"><code>$1</code></pre>'
+                  )
+                  .replace(
+                    /```javascript([\s\S]*?)```/g,
+                    '<pre class="sql-code-block"><code>$1</code></pre>'
+                  )
+                  .replace(
+                    /```cypher([\s\S]*?)```/g,
+                    '<pre class="sql-code-block"><code>$1</code></pre>'
+                  )
+                  .replace(
+                    /```json([\s\S]*?)```/g,
+                    '<pre class="sql-code-block"><code>$1</code></pre>'
+                  )
+                  .replace(
+                    /```python([\s\S]*?)```/g,
+                    '<pre class="sql-code-block"><code>$1</code></pre>'
                   )
                   .replace(
                     /# (.*)/g,
@@ -241,10 +357,17 @@ export default function LessonDetailPage() {
                 marginBottom: "16px",
               }}
             >
-              <Button variant="primary" onClick={checkQuery}>
+              <Button
+                variant="primary"
+                onClick={checkQuery}
+                icon={<CheckCircle size={16} />}
+              >
                 Check Answer
               </Button>
-              <Button onClick={() => setShowHint(!showHint)}>
+              <Button
+                onClick={() => setShowHint(!showHint)}
+                icon={<HelpCircle size={16} />}
+              >
                 {showHint ? "Hide Hint" : "Show Hint"}
               </Button>
               <Button onClick={() => setShowSolution(!showSolution)}>
@@ -280,7 +403,13 @@ export default function LessonDetailPage() {
                   marginBottom: "16px",
                 }}
               >
-                <strong>💡 Hint:</strong> {currentExercise.hint}
+                <strong
+                  style={{ display: "flex", alignItems: "center", gap: "6px" }}
+                >
+                  <HelpCircle size={16} />
+                  Hint:
+                </strong>
+                {currentExercise.hint}
               </div>
             )}
 
@@ -349,7 +478,10 @@ export default function LessonDetailPage() {
           </Card>
 
           <Link to="/lessons">
-            <Button style={{ width: "100%", marginTop: "16px" }}>
+            <Button
+              style={{ width: "100%", marginTop: "16px" }}
+              icon={<ArrowLeft size={16} />}
+            >
               Back to Lessons
             </Button>
           </Link>

@@ -7,6 +7,8 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   style?: CSSProperties;
   className?: string;
+  icon?: ReactNode;
+  iconPosition?: "left" | "right";
 }
 
 export default function Button({
@@ -16,6 +18,8 @@ export default function Button({
   type = "button",
   style,
   className = "",
+  icon,
+  iconPosition = "left",
 }: ButtonProps) {
   const baseStyles: CSSProperties = {
     padding: "12px 18px",
@@ -49,9 +53,19 @@ export default function Button({
         ...baseStyles,
         ...variantStyles[variant],
         ...style,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: icon ? "8px" : "0",
       }}
     >
+      {icon && iconPosition === "left" && (
+        <span style={{ display: "flex", alignItems: "center" }}>{icon}</span>
+      )}
       {children}
+      {icon && iconPosition === "right" && (
+        <span style={{ display: "flex", alignItems: "center" }}>{icon}</span>
+      )}
     </button>
   );
 }

@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import { lessons } from "../data/lessons.ts";
 import Card from "../components/Card.tsx";
-import { useProgress } from "../contexts/ProgressContext.tsx";
+import { useProgress } from "../hooks/useProgress";
+import {
+  BookOpen,
+  Clock,
+  CheckCircle,
+  Trophy,
+  Target,
+  Database,
+} from "lucide-react";
 
 export default function LessonsPage() {
   const { progress } = useProgress();
@@ -41,13 +49,163 @@ export default function LessonsPage() {
         padding: "0 20px",
       }}
     >
-      <div style={{ marginBottom: "28px" }}>
-        <h1 style={{ margin: "0 0 8px 0", fontSize: "32px" }}>SQL Lessons</h1>
-        <p style={{ color: "var(--muted)", margin: 0 }}>
-          Master SQL from basics to advanced topics. Track your progress as you
-          learn.
-        </p>
-      </div>
+      {/* Header with Navigation */}
+      <Card style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "16px",
+          }}
+        >
+          <div>
+            <h1
+              style={{
+                margin: "0 0 8px 0",
+                fontSize: "32px",
+                color: "var(--csu-green)",
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+              }}
+            >
+              <Database size={36} />
+              CSU Digital Academy - SQL Mastery
+            </h1>
+            <p style={{ color: "var(--muted)", margin: 0 }}>
+              Master SQL from basics to advanced topics at Caraga State
+              University. Track your progress as you learn through our
+              comprehensive curriculum.
+            </p>
+          </div>
+          <Link to="/nosql-lessons" style={{ textDecoration: "none" }}>
+            <button
+              style={{
+                background: "var(--csu-gold)",
+                color: "white",
+                border: "none",
+                padding: "12px 20px",
+                borderRadius: "8px",
+                fontWeight: "600",
+                cursor: "pointer",
+                fontSize: "14px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 12px rgba(255, 199, 39, 0.3)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              <Target size={16} />
+              Explore NoSQL
+            </button>
+          </Link>
+        </div>
+
+        {/* Progress Overview */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+            gap: "20px",
+            marginTop: "24px",
+            paddingTop: "20px",
+            borderTop: "1px solid #eee",
+          }}
+        >
+          <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                marginBottom: "4px",
+              }}
+            >
+              <BookOpen size={20} color="var(--csu-green)" />
+            </div>
+            <div
+              style={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                color: "var(--csu-green)",
+              }}
+            >
+              {lessons.length}
+            </div>
+            <div style={{ color: "var(--muted)", fontSize: "14px" }}>
+              SQL Lessons
+            </div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                marginBottom: "4px",
+              }}
+            >
+              <CheckCircle size={20} color="var(--success)" />
+            </div>
+            <div
+              style={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                color: "var(--success)",
+              }}
+            >
+              {lessons.filter((lesson) => isLessonCompleted(lesson.id)).length}
+            </div>
+            <div style={{ color: "var(--muted)", fontSize: "14px" }}>
+              Completed
+            </div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                marginBottom: "4px",
+              }}
+            >
+              <Trophy size={20} color="var(--csu-gold)" />
+            </div>
+            <div
+              style={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                color: "var(--csu-gold)",
+              }}
+            >
+              {Math.round(
+                (lessons.filter((lesson) => isLessonCompleted(lesson.id))
+                  .length /
+                  lessons.length) *
+                  100
+              )}
+              %
+            </div>
+            <div style={{ color: "var(--muted)", fontSize: "14px" }}>
+              Progress
+            </div>
+          </div>
+        </div>
+      </Card>
 
       {/* Progress Overview */}
       <Card
@@ -103,7 +261,7 @@ export default function LessonsPage() {
               return (
                 <Link
                   key={lesson.id}
-                  to={`/lessons/${lesson.id}`}
+                  to={`/lesson/${lesson.id}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <Card
@@ -181,8 +339,25 @@ export default function LessonsPage() {
                         color: "var(--muted)",
                       }}
                     >
-                      <span>📝 {lesson.exercises.length} exercises</span>
-                      <span>⏱️ {lesson.estimatedTime} min</span>
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                        }}
+                      >
+                        <BookOpen size={14} /> {lesson.exercises.length}{" "}
+                        exercises
+                      </span>
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                        }}
+                      >
+                        <Clock size={14} /> {lesson.estimatedTime} min
+                      </span>
                     </div>
                   </Card>
                 </Link>
