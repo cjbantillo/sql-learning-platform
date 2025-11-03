@@ -7432,19 +7432,7 @@ export function getLessonsByDifficulty(
   return lessons.filter((lesson) => lesson.difficulty === difficulty);
 }
 
-// Re-export NoSQL lessons for unified access
-export {
-  nosqlLessons,
-  getNoSQLLessonById,
-  getNoSQLLessonsByCategory,
-  getNoSQLLessonsByDifficulty,
-  getAllNoSQLLessons,
-} from "./nosql-lessons";
-
-// Import NoSQL lessons
-import { getAllNoSQLLessons } from "./nosql-lessons";
-
-// Combined function to get all lessons (SQL + NoSQL)
+// Combined function to get all lessons (SQL only)
 export function getAllLessons(): Lesson[] {
-  return [...lessons, ...getAllNoSQLLessons()];
+  return lessons;
 }

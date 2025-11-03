@@ -2,14 +2,7 @@ import { Link } from "react-router-dom";
 import { lessons } from "../data/lessons.ts";
 import Card from "../components/Card.tsx";
 import { useProgress } from "../hooks/useProgress";
-import {
-  BookOpen,
-  Clock,
-  CheckCircle,
-  Trophy,
-  Target,
-  Database,
-} from "lucide-react";
+import { BookOpen, Clock, CheckCircle, Trophy, Database } from "lucide-react";
 
 export default function LessonsPage() {
   const { progress } = useProgress();
@@ -80,36 +73,6 @@ export default function LessonsPage() {
               comprehensive curriculum.
             </p>
           </div>
-          <Link to="/nosql-lessons" style={{ textDecoration: "none" }}>
-            <button
-              style={{
-                background: "var(--csu-gold)",
-                color: "white",
-                border: "none",
-                padding: "12px 20px",
-                borderRadius: "8px",
-                fontWeight: "600",
-                cursor: "pointer",
-                fontSize: "14px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 12px rgba(255, 199, 39, 0.3)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              <Target size={16} />
-              Explore NoSQL
-            </button>
-          </Link>
         </div>
 
         {/* Progress Overview */}

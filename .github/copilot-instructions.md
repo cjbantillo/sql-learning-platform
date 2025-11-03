@@ -21,7 +21,7 @@
 - **Persistence**: localStorage for dark mode, user progress, and lesson completion
 - **Entry Points**: `src/main.tsx` → `src/App.tsx`
 - **Implemented Components**: Header, Footer, Card, Button (with icon support), Modal, SQLPlayground
-- **Implemented Pages**: HomePage, LessonsPage, NoSQLLessonsPage, LessonDetailPage
+- **Implemented Pages**: HomePage, LessonsPage, LessonDetailPage
 - **Component Architecture**: Functional components with TypeScript interfaces for props
 
 ### Planned Backend (Not Yet Implemented)
@@ -230,7 +230,7 @@ User Input (Editor/Voice) → Frontend (React)
   - Modal system for About, Achievements, Contact, Socials
   - Progress tracking UI (static, 42% mock progress)
   - Featured lessons section with professional iconography
-  - Multi-page routing (HomePage, LessonsPage, NoSQLLessonsPage, LessonDetailPage)
+  - Multi-page routing (HomePage, LessonsPage, LessonDetailPage)
 - **Not Yet Built**:
   - Backend integration (Django REST API, Supabase)
   - AI tutor chatbot (Google Gemini integration)

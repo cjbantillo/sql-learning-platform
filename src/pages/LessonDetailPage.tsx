@@ -2,7 +2,6 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
 import { getLessonById, type Exercise } from "../data/lessons.ts";
-import { getNoSQLLessonById } from "../data/nosql-lessons.ts";
 import { useProgress } from "../hooks/useProgress";
 import Card from "../components/Card.tsx";
 import Button from "../components/Button.tsx";
@@ -102,7 +101,7 @@ export default function LessonDetailPage() {
   const navigate = useNavigate();
   const { completeLesson, addBadge } = useProgress();
 
-  const lesson = id ? getLessonById(id) || getNoSQLLessonById(id) : undefined;
+  const lesson = id ? getLessonById(id) : undefined;
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [query, setQuery] = useState("");
   const [showHint, setShowHint] = useState(false);
@@ -248,7 +247,7 @@ export default function LessonDetailPage() {
                 __html: lesson.content
                   .replace(
                     /```sql([\s\S]*?)```/g,
-                    (_, code) =>
+                    (_: string, code: string) =>
                       `<pre class="sql-code-block"><code>${highlightSQL(
                         code.trim()
                       )}</code></pre>`

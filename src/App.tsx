@@ -4,7 +4,6 @@ import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import LessonsPage from "./pages/LessonsPage.tsx";
-import NoSQLLessonsPage from "./pages/NoSQLLessonsPage.tsx";
 import LessonDetailPage from "./pages/LessonDetailPage.tsx";
 import { ProgressProvider } from "./contexts/ProgressContext.tsx";
 
@@ -28,7 +27,6 @@ function App() {
             }
           />
           <Route path="/lessons" element={<LessonsPage />} />
-          <Route path="/nosql-lessons" element={<NoSQLLessonsPage />} />
           <Route path="/lesson/:id" element={<LessonDetailPage />} />
         </Routes>
         <Footer />
