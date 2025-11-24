@@ -245,14 +245,6 @@ export default function Footer() {
               </Link>
             </div>
           </div>
-
-          {/* Made with love badge */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-400">
-              Made with <span className="text-red-400">sweat and tears</span> for CSU
-              Students
-            </p>
-          </div>
         </motion.div>
       </div>
     </footer>

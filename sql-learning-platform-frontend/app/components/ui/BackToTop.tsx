@@ -47,7 +47,7 @@ export default function BackToTop() {
           <div className="absolute inset-0 rounded-full bg-[#FFC727]/20 blur-xl group-hover:bg-[#FFC727]/30 transition" />
 
           {/* Icon */}
-          <ArrowUp className="w-6 h-6 relative z-10 group-hover:translate-y-[-2px] transition-transform" />
+          <ArrowUp className="w-6 h-6 relative z-10 group-hover:-translate-y-0.5 transition-transform" />
         </motion.button>
       )}
     </AnimatePresence>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, Home, BookOpen, Code, Sparkles, LogIn, Info } from "lucide-react";
+import { Menu, X, Home, Code, LogIn, Info } from "lucide-react";
 import Link from "next/link";
 
 export default function Navbar() {
