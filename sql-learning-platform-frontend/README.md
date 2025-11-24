@@ -45,4 +45,5 @@ component :
         navbar
         hero
     ui
+        BackToTop
     
