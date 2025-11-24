@@ -41,5 +41,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 folder:
 component :
     section 
+        footer
+        navbar
+        hero
     ui
     
