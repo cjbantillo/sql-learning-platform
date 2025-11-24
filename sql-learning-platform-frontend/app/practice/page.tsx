@@ -4,6 +4,7 @@ import PracticeAppBar from "@/app/practice/PracticeAppBar";
 import LessonSidebar from "@/app/practice/LessonSidebar";
 import ContentArea from "@/app/practice/ContentArea";
 import EditorArea from "@/app/practice/EditorArea";
+import Chatbot from "../components/ui/Chatbot";
 import Footer from "@/app/components/sections/footer";
 
 export default function PracticePage() {
@@ -27,6 +28,7 @@ export default function PracticePage() {
 
           {/* 2. SQL Editor Area */}
           <EditorArea />
+          <Chatbot />
         </div>
       </div>
 
