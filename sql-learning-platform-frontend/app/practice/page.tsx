@@ -3,7 +3,6 @@ import Navbar from "@/app/components/sections/navigation";
 import PracticeAppBar from "@/app/practice/PracticeAppBar";
 import LessonSidebar from "@/app/practice/LessonSidebar";
 import ContentArea from "@/app/practice/ContentArea";
-import EditorArea from "@/app/practice/EditorArea";
 import Chatbot from "../components/ui/Chatbot";
 import Footer from "@/app/components/sections/footer";
 
@@ -21,19 +20,15 @@ export default function PracticePage() {
         {/* 1. Left Sidebar - Lesson List */}
         <LessonSidebar />
 
-        {/* Center Content Area */}
-        <div className="flex-1 flex flex-col lg:flex-row">
-          {/* 1. Content/Tutorial Area */}
-          <ContentArea />
-
-          {/* 2. SQL Editor Area */}
-          <EditorArea />
-          <Chatbot />
-        </div>
+        {/* Content/Tutorial Area (includes modal trigger) */}
+        <ContentArea />
       </div>
 
       {/* 5. Footer */}
       <Footer />
+
+      {/* Floating Chatbot */}
+      <Chatbot />
     </div>
   );
 }
