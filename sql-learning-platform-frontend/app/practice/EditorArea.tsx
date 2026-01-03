@@ -1,26 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { Play, RotateCcw, Copy, Check } from "lucide-react";
-import { motion } from "framer-motion";
+import { Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Editor from "@monaco-editor/react";
 
 export default function EditorArea() {
-  const [query, setQuery] = useState("SELECT * FROM Customers;");
+  const [value, setValue] = useState("SELECT * FROM Customers;");
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(query);
+    navigator.clipboard.writeText(value);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleRun = () => {
     // Execute query logic here
-    console.log("Running query:", query);
+    console.log("Running query:", value);
   };
 
   const handleReset = () => {
-    setQuery("SELECT * FROM Customers;");
+    setValue("SELECT * FROM Customers;");
   };
 
   return (
@@ -50,32 +51,45 @@ export default function EditorArea() {
             className="p-2 hover:bg-gray-700 rounded transition"
             title="Reset"
           >
-            <RotateCcw className="w-4 h-4" />
+            <Copy className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Code Editor */}
-      <div className="flex-1 bg-gray-900 text-white p-4 overflow-auto">
-        <textarea
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full h-full bg-transparent font-mono text-sm outline-none resize-none"
-          spellCheck={false}
+      {/* Monaco Editor */}
+      <div className="flex-1 bg-gray-900">
+        <Editor
+          height="100%"
+          language="sql"
+          theme="vs-dark"
+          value={value}
+          onChange={(v) => setValue(v || "")}
+          options={{
+            minimap: { enabled: false },
+            fontSize: 14,
+            wordWrap: "on",
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+          }}
         />
       </div>
 
       {/* Action Buttons */}
-      <div className="p-4 bg-white border-t border-gray-200">
-        <motion.button
+      <div className="p-4 bg-white border-t border-gray-200 flex justify-between">
+        <div className="space-x-2">
+          <Button variant="secondary" onClick={handleCopy}>
+            {copied ? "Copied!" : "Copy"}
+          </Button>
+          <Button variant="secondary" onClick={handleReset}>
+            Reset
+          </Button>
+        </div>
+        <Button
           onClick={handleRun}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#1B5E20] text-white rounded-lg hover:bg-[#164A16] transition font-semibold"
+          className="bg-yellow-500 hover:bg-yellow-400 text-black"
         >
-          <Play className="w-5 h-5" />
-          Run Query
-        </motion.button>
+          Run Query (Simulated)
+        </Button>
       </div>
 
       {/* Results Area */}

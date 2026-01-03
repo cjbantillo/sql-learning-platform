@@ -89,6 +89,7 @@ export default function Chatbot() {
       <AnimatePresence>
         {!isOpen && (
           <motion.button
+            type="button"
             onClick={() => setIsOpen(true)}
             className="fixed bottom-8 right-24 z-50 p-4 bg-[#1B5E20] text-white rounded-full shadow-lg hover:bg-[#164A16] transition-colors group"
             initial={{ opacity: 0, scale: 0 }}
@@ -139,6 +140,8 @@ export default function Chatbot() {
                 </div>
               </div>
               <button
+                type="button"
+                aria-label="Close chatbot"
                 onClick={() => setIsOpen(false)}
                 className="p-2 hover:bg-white/20 rounded-lg transition"
               >
@@ -287,6 +290,8 @@ export default function Chatbot() {
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent"
                 />
                 <motion.button
+                  type="button"
+                  aria-label="Send message"
                   onClick={handleSendMessage}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
