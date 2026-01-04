@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ChevronRight,
   ChevronDown,
   CheckCircle2,
   Circle,
   Zap,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -41,6 +43,14 @@ export default function CiscoSidebar({
   const [expandedModules, setExpandedModules] = useState<number[]>(
     modules.map((m) => m.id)
   );
+  const [hiddenLessons, setHiddenLessons] = useState<number[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("hiddenLessons");
+    setHiddenLessons(stored ? JSON.parse(stored) : []);
+    setIsLoaded(true);
+  }, []);
 
   const toggleModule = (moduleId: number) => {
     setExpandedModules((prev) =>
@@ -48,6 +58,16 @@ export default function CiscoSidebar({
         ? prev.filter((id) => id !== moduleId)
         : [...prev, moduleId]
     );
+  };
+
+  const toggleHideLesson = (lessonId: number) => {
+    setHiddenLessons((prev) => {
+      const updated = prev.includes(lessonId)
+        ? prev.filter((id) => id !== lessonId)
+        : [...prev, lessonId];
+      localStorage.setItem("hiddenLessons", JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const getModuleProgress = (moduleId: number) => {
@@ -166,49 +186,72 @@ export default function CiscoSidebar({
                         exit={{ opacity: 0, height: 0 }}
                         className="bg-gray-50"
                       >
-                        {moduleLessons.map((lesson) => {
-                          const isActive = lesson.id === selectedLessonId;
-                          const isCompleted = completedLessons.includes(
-                            lesson.id
-                          );
+                        {moduleLessons
+                          .filter(
+                            (lesson) => !hiddenLessons.includes(lesson.id)
+                          )
+                          .map((lesson) => {
+                            const isActive = lesson.id === selectedLessonId;
+                            const isCompleted = completedLessons.includes(
+                              lesson.id
+                            );
 
-                          return (
-                            <li
-                              key={lesson.id}
-                              className="border-b border-gray-200"
-                            >
-                              <button
-                                onClick={() => onSelectLesson(lesson.id)}
-                                className={`w-full text-left px-4 py-2.5 flex items-center gap-3 transition ${
-                                  isActive
-                                    ? "bg-[#1B5E20] text-white"
-                                    : "hover:bg-gray-100 text-gray-700"
-                                }`}
+                            return (
+                              <li
+                                key={lesson.id}
+                                className="border-b border-gray-200 group"
                               >
-                                {isCompleted ? (
-                                  <CheckCircle2
-                                    className={`w-4 h-4 flex-shrink-0 ${
-                                      isActive
-                                        ? "text-yellow-300"
-                                        : "text-green-700"
+                                <div
+                                  className={`w-full text-left px-4 py-2.5 flex items-center gap-3 transition ${
+                                    isActive
+                                      ? "bg-[#1B5E20] text-white"
+                                      : "hover:bg-gray-100 text-gray-700"
+                                  }`}
+                                >
+                                  <button
+                                    onClick={() => onSelectLesson(lesson.id)}
+                                    className="flex-1 text-left flex items-center gap-3"
+                                  >
+                                    {isCompleted ? (
+                                      <CheckCircle2
+                                        className={`w-4 h-4 flex-shrink-0 ${
+                                          isActive
+                                            ? "text-yellow-300"
+                                            : "text-green-700"
+                                        }`}
+                                      />
+                                    ) : (
+                                      <Circle
+                                        className={`w-4 h-4 flex-shrink-0 ${
+                                          isActive
+                                            ? "text-green-100"
+                                            : "text-gray-400"
+                                        }`}
+                                      />
+                                    )}
+                                    <span className="text-sm font-medium truncate">
+                                      {lesson.title}
+                                    </span>
+                                  </button>
+                                  <button
+                                    onClick={() => toggleHideLesson(lesson.id)}
+                                    className={`flex-shrink-0 p-1 rounded hover:bg-gray-200 transition opacity-0 group-hover:opacity-100 ${
+                                      isActive ? "hover:bg-[#0d4620]" : ""
                                     }`}
-                                  />
-                                ) : (
-                                  <Circle
-                                    className={`w-4 h-4 flex-shrink-0 ${
-                                      isActive
-                                        ? "text-green-100"
-                                        : "text-gray-400"
-                                    }`}
-                                  />
-                                )}
-                                <span className="text-sm font-medium truncate">
-                                  {lesson.title}
-                                </span>
-                              </button>
-                            </li>
-                          );
-                        })}
+                                    title="Hide lesson"
+                                  >
+                                    <Eye
+                                      className={`w-4 h-4 ${
+                                        isActive
+                                          ? "text-white"
+                                          : "text-gray-500"
+                                      }`}
+                                    />
+                                  </button>
+                                </div>
+                              </li>
+                            );
+                          })}
                       </motion.ul>
                     )}
                   </AnimatePresence>
@@ -217,6 +260,30 @@ export default function CiscoSidebar({
             })}
           </ul>
         </nav>
+
+        {/* Hidden Lessons Section */}
+        {hiddenLessons.length > 0 && (
+          <div className="border-t border-gray-200 p-4 bg-gray-50">
+            <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
+              Hidden Lessons ({hiddenLessons.length})
+            </p>
+            <div className="space-y-1 max-h-40 overflow-y-auto">
+              {lessons
+                .filter((lesson) => hiddenLessons.includes(lesson.id))
+                .map((lesson) => (
+                  <button
+                    key={lesson.id}
+                    onClick={() => toggleHideLesson(lesson.id)}
+                    className="w-full text-left px-3 py-2 text-xs text-gray-600 hover:bg-gray-200 rounded transition flex items-center gap-2"
+                    title="Show lesson"
+                  >
+                    <EyeOff className="w-3 h-3 flex-shrink-0" />
+                    <span className="truncate">{lesson.title}</span>
+                  </button>
+                ))}
+            </div>
+          </div>
+        )}
       </motion.aside>
     </>
   );

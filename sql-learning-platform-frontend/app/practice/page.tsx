@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/app/components/sections/navigation";
 import PracticeAppBar from "@/app/practice/PracticeAppBar";
 import Chatbot from "../components/ui/Chatbot";
@@ -25,7 +25,7 @@ import DatabaseManagement from "./lessons/DatabaseManagement";
 import AdvancedTopics from "./lessons/AdvancedTopics";
 import EditorArea from "./EditorArea";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, RotateCcw } from "lucide-react";
 
 const flatLessons = [
   {
@@ -140,13 +140,14 @@ const modules: Module[] = [
 
 export default function PracticePage() {
   const [selectedLessonId, setSelectedLessonId] = useState(1);
-  const [completedLessons, setCompletedLessons] = useState<number[]>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("completedLessons");
-      return stored ? JSON.parse(stored) : [];
-    }
-    return [];
-  });
+  const [completedLessons, setCompletedLessons] = useState<number[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("completedLessons");
+    setCompletedLessons(stored ? JSON.parse(stored) : []);
+    setIsLoaded(true);
+  }, []);
 
   const selectedLesson = flatLessons.find((l) => l.id === selectedLessonId);
   const LessonComponent = selectedLesson?.component;
@@ -159,6 +160,17 @@ export default function PracticePage() {
 
       // Update individual lesson progress
       localStorage.setItem(`progress_lesson_${selectedLessonId}`, "true");
+    }
+  };
+
+  const handleMarkIncomplete = () => {
+    if (completedLessons.includes(selectedLessonId)) {
+      const updated = completedLessons.filter((id) => id !== selectedLessonId);
+      setCompletedLessons(updated);
+      localStorage.setItem("completedLessons", JSON.stringify(updated));
+
+      // Remove individual lesson progress
+      localStorage.removeItem(`progress_lesson_${selectedLessonId}`);
     }
   };
 
@@ -220,21 +232,25 @@ export default function PracticePage() {
               {LessonComponent && (
                 <div className="mt-8 flex justify-between items-center border-t pt-6">
                   <Button
-                    onClick={handleMarkComplete}
-                    disabled={isCompleted}
+                    onClick={
+                      isCompleted ? handleMarkIncomplete : handleMarkComplete
+                    }
                     className={`${
                       isCompleted
-                        ? "bg-green-600 cursor-not-allowed"
+                        ? "bg-green-600 hover:bg-green-700"
                         : "bg-[#1B5E20] hover:bg-[#164A16]"
                     } text-white`}
                   >
                     {isCompleted ? (
                       <>
-                        <CheckCircle2 className="w-5 h-5 mr-2" />
-                        Lesson Completed
+                        <RotateCcw className="w-5 h-5 mr-2" />
+                        Mark as Incomplete
                       </>
                     ) : (
-                      "Mark as Complete"
+                      <>
+                        <CheckCircle2 className="w-5 h-5 mr-2" />
+                        Mark as Complete
+                      </>
                     )}
                   </Button>
                 </div>
