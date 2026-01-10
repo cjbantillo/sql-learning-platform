@@ -1,11 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { Menu, X, Home, Code, LogIn, Info } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  Menu,
+  X,
+  Home,
+  Code,
+  LogIn,
+  Info,
+  LayoutDashboard,
+  LogOut,
+} from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const authStatus = localStorage.getItem("isAuthenticated") === "true";
+    setIsAuthenticated(authStatus);
+  }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userEmail");
+    setIsAuthenticated(false);
+    router.push("/");
+  };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -17,7 +41,9 @@ export default function Navbar() {
     { href: "/practice", label: "Practice SQL", icon: Code },
     // { href: "/ai-query", label: "AI Query", icon: Sparkles },
     { href: "/about", label: "About", icon: Info },
-    { href: "/sign-in", label: "Sign In", icon: LogIn },
+    isAuthenticated
+      ? { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard }
+      : { href: "/sign-in", label: "Sign In", icon: LogIn },
   ];
 
   return (
@@ -46,7 +72,7 @@ export default function Navbar() {
           </button>
 
           {/* Desktop Nav Links */}
-          <ul className="hidden md:flex gap-2 text-base font-medium">
+          <ul className="hidden md:flex gap-2 text-base font-medium items-center">
             {navLinks.map((link) => {
               const Icon = link.icon;
               return (
@@ -61,6 +87,17 @@ export default function Navbar() {
                 </li>
               );
             })}
+            {isAuthenticated && (
+              <li>
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center gap-2 hover:bg-red-600 bg-red-700 px-4 py-2 rounded-lg transition"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign Out
+                </button>
+              </li>
+            )}
           </ul>
         </div>
 
@@ -82,6 +119,20 @@ export default function Navbar() {
                 </li>
               );
             })}
+            {isAuthenticated && (
+              <li>
+                <button
+                  onClick={() => {
+                    handleSignOut();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center gap-3 hover:bg-red-600 bg-red-700 px-4 py-3 rounded-lg transition"
+                >
+                  <LogOut className="h-5 w-5" />
+                  Sign Out
+                </button>
+              </li>
+            )}
           </ul>
         )}
       </div>

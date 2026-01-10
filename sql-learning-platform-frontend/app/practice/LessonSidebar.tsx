@@ -1,34 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import { BookOpen, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronRight, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function LessonSidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+interface Lesson {
+  id: number;
+  title: string;
+}
 
-  const lessons = [
-    { id: 1, title: "SQL HOME", active: true },
-    { id: 2, title: "SQL Intro" },
-    { id: 3, title: "SQL Syntax" },
-    { id: 4, title: "SQL Select" },
-    { id: 5, title: "SQL Select Distinct" },
-    { id: 6, title: "SQL Where" },
-    { id: 7, title: "SQL Order By" },
-    { id: 8, title: "SQL And" },
-    { id: 9, title: "SQL Or" },
-    { id: 10, title: "SQL Not" },
-    { id: 11, title: "SQL Insert Into" },
-    { id: 12, title: "SQL Null Values" },
-    { id: 13, title: "SQL Update" },
-    { id: 14, title: "SQL Delete" },
-    { id: 15, title: "SQL Select Top" },
-  ];
+interface LessonSidebarProps {
+  lessons: Lesson[];
+  selectedLessonId: number;
+  onSelectLesson: (id: number) => void;
+  completedLessons: number[];
+}
+
+export default function LessonSidebar({
+  lessons,
+  selectedLessonId,
+  onSelectLesson,
+  completedLessons,
+}: LessonSidebarProps) {
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <>
       {/* Toggle Button (Mobile) */}
       <button
+        type="button"
+        aria-label="Toggle sidebar"
         onClick={() => setIsOpen(!isOpen)}
         className="lg:hidden fixed top-20 left-0 z-50 bg-[#1B5E20] text-white p-2 rounded-r-lg"
       >
@@ -53,19 +54,32 @@ export default function LessonSidebar() {
 
           <nav>
             <ul className="space-y-1">
-              {lessons.map((lesson) => (
-                <li key={lesson.id}>
-                  <button
-                    className={`w-full text-left px-4 py-2 rounded transition ${
-                      lesson.active
-                        ? "bg-[#1B5E20] text-white"
-                        : "hover:bg-gray-200 text-gray-700"
-                    }`}
-                  >
-                    {lesson.title}
-                  </button>
-                </li>
-              ))}
+              {lessons.map((lesson) => {
+                const isActive = lesson.id === selectedLessonId;
+                const isCompleted = completedLessons.includes(lesson.id);
+
+                return (
+                  <li key={lesson.id}>
+                    <button
+                      onClick={() => onSelectLesson(lesson.id)}
+                      className={`w-full text-left px-4 py-2 rounded transition flex items-center justify-between ${
+                        isActive
+                          ? "bg-[#1B5E20] text-white"
+                          : "hover:bg-gray-200 text-gray-700"
+                      }`}
+                    >
+                      <span>{lesson.title}</span>
+                      {isCompleted && (
+                        <CheckCircle2
+                          className={`w-4 h-4 ${
+                            isActive ? "text-yellow-400" : "text-green-600"
+                          }`}
+                        />
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
         </div>
