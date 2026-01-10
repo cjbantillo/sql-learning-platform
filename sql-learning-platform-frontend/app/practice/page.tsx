@@ -92,49 +92,49 @@ const modules: Module[] = [
     title: "Database Fundamentals",
     lessons: flatLessons
       .filter((l) => l.moduleId === 1)
-      .map(({ component, moduleId, ...rest }) => rest),
+      .map(({ component, ...rest }) => rest),
   },
   {
     id: 2,
     title: "Database Design",
     lessons: flatLessons
       .filter((l) => l.moduleId === 2)
-      .map(({ component, moduleId, ...rest }) => rest),
+      .map(({ component, ...rest }) => rest),
   },
   {
     id: 3,
     title: "Basic SELECT Queries",
     lessons: flatLessons
       .filter((l) => l.moduleId === 3)
-      .map(({ component, moduleId, ...rest }) => rest),
+      .map(({ component, ...rest }) => rest),
   },
   {
     id: 4,
     title: "Advanced Filtering",
     lessons: flatLessons
       .filter((l) => l.moduleId === 4)
-      .map(({ component, moduleId, ...rest }) => rest),
+      .map(({ component, ...rest }) => rest),
   },
   {
     id: 5,
     title: "Working with Multiple Tables",
     lessons: flatLessons
       .filter((l) => l.moduleId === 5)
-      .map(({ component, moduleId, ...rest }) => rest),
+      .map(({ component, ...rest }) => rest),
   },
   {
     id: 6,
     title: "Subqueries and Advanced Queries",
     lessons: flatLessons
       .filter((l) => l.moduleId === 6)
-      .map(({ component, moduleId, ...rest }) => rest),
+      .map(({ component, ...rest }) => rest),
   },
   {
     id: 7,
     title: "Database Administration",
     lessons: flatLessons
       .filter((l) => l.moduleId === 7)
-      .map(({ component, moduleId, ...rest }) => rest),
+      .map(({ component, ...rest }) => rest),
   },
 ];
 
